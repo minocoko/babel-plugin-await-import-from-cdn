@@ -1,4 +1,4 @@
-# templ
+# babel-plugin-fast-import-from-cdn
 
 input:
 ```javascript
