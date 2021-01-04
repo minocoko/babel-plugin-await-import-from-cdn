@@ -59,8 +59,6 @@ console.log(api)
           const variableDeclaration = j.variableDeclaration('const',[variableDeclarator]);
           j(declaration).replaceWith(variableDeclaration);
         }
-    	
-    	// j(declaration).replaceWith(`const ${defines} = await import('https://cdn.skypack.dev/${source}@16.13.1');`);
     })
     .toSource();
 }
