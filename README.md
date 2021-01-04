@@ -1,16 +1,21 @@
 # templ
 
 input:
+```javascript
 import React, {useState} from 'react';
 // import * as React from 'react';
+```
 
 output:
+```javascript
 const {
   "default": "React",
   "useState": "useState"
 } = await import('https://cdn.skypack.dev/react@16.13.1');
+```
 
 code:
+```javascript
 // Press ctrl+space for code completion
 export default function transformer(file, api) {
   const j = api.jscodeshift;
@@ -59,4 +64,4 @@ console.log(api)
     })
     .toSource();
 }
-
+```
