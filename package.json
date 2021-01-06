@@ -3,10 +3,16 @@
   "version": "1.0.3",
   "main": "dist/index.js",
   "repository": "https://github.com/minocoko/babel-plugin-cdn-import.git",
+  "homepage": "https://github.com/minocoko/babel-plugin-cdn-import#readme",
   "author": "Minco Ke <minocoke@outlook.com>",
   "license": "MIT",
   "files": [
     "dist"
+  ],
+  "keywords":[
+    "cdn",
+    "import",
+    "top level await"
   ],
   "scripts": {
     "lint": "eslint src babel.config.js rollup.config.js --fix",
