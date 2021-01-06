@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-cdn-import",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "dist/index.js",
   "repository": "https://github.com/minocoko/babel-plugin-cdn-import.git",
   "author": "Minco Ke <minocoke@outlook.com>",
