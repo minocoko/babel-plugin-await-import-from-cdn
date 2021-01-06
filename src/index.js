@@ -42,11 +42,20 @@ export default ({ types: t }) => {
       ImportDeclaration(declaration, state) {
         // console.log(state)
         const { cwd, opts: { cdn, shim, matches } } = state;
+        const source = declaration.node.source.value;
+        const [packageName, ...extraPath] = source.split('/');
+        if (matches) {
+          for (let index = 0; index < matches.length; index += 1) {
+            const match = matches[index];
+            if (!match[0].test(packageName)) {
+              return;
+            }
+          }
+        }
+
         if (!packageVersionCache) {
           updatePackageVersionCache(cwd);
         }
-        const source = declaration.node.source.value;
-        const [packageName, ...extraPath] = source.split('/');
         const packageVersion = packageVersionCache[packageName];
         const packageUrl = buildPackageUrl(matches, cdn, packageName, packageVersion, extraPath);
         const awaitCallExpressionCallee = getAwaitCallExpressionCallee(shim);

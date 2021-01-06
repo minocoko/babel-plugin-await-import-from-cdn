@@ -62,5 +62,13 @@ pluginTester({
       code: 'import * as Jest from \'jest\';',
       output: `const Jest = await system.import("${cdn}/jest@26.6.3/build/jest.js");`,
     },
+    'Multiple import with system.import': {
+      code: `import jest from 'jest';
+      import './index.css';`,
+      output: `const { default: jest } = await system.import(
+  "https://unpkg.com/jest@26.6.3/build/jest.js"
+);
+import "./index.css";`, // formatted
+    },
   },
 });
