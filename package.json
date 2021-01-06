@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-cdn-import",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "dist/index.js",
   "repository": "https://github.com/minocoko/babel-plugin-cdn-import.git",
   "homepage": "https://github.com/minocoko/babel-plugin-cdn-import#readme",
@@ -9,7 +9,7 @@
   "files": [
     "dist"
   ],
-  "keywords":[
+  "keywords": [
     "cdn",
     "import",
     "top level await"
