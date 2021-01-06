@@ -5,14 +5,20 @@
   "repository": "https://github.com/minocoko/babel-plugin-cdn-import.git",
   "author": "Minco Ke <minocoke@outlook.com>",
   "license": "MIT",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "lint": "eslint src --fix",
     "test": "jest",
-    "build": "rollup -c"
+    "test:coverage": "jest --coverage",
+    "build": "rollup -c",
+    "prepublish": "yarn build"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "babel-plugin-tester": "^10.0.0",
+    "coveralls": "^3.1.0",
     "eslint": "^7.17.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
