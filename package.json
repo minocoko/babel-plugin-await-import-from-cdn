@@ -9,7 +9,7 @@
     "dist"
   ],
   "scripts": {
-    "lint": "eslint src --fix",
+    "lint": "eslint src babel.config.js rollup.config.js --fix",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "build": "rollup -c",

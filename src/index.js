@@ -15,19 +15,42 @@ export default ({ types: t }) => {
     packageVersionCache = packageManager.list();
   };
 
+  const getAwaitCallExpressionCallee = (shim) => {
+    if (shim) {
+      return t.memberExpression(t.identifier(shim), t.identifier('import'));
+    }
+
+    return t.import();
+  };
+
+  const buildPackageUrl = (matches, cdn, packageName, packageVersion, extraPath) => {
+    let url = `${cdn}/${packageName}@${packageVersion}${extraPath.length ? `/${extraPath.join('/')}` : ''}`;
+    if (matches) {
+      for (let index = 0; index < matches.length; index += 1) {
+        const match = matches[index];
+        if (match[0].test(packageName)) {
+          url += match[1];
+          break;
+        }
+      }
+    }
+    return t.stringLiteral(url);
+  };
+
   return {
     visitor: {
       ImportDeclaration(declaration, state) {
         // console.log(state)
-        const { cwd, opts: { cdn } } = state;
+        const { cwd, opts: { cdn, shim, matches } } = state;
         if (!packageVersionCache) {
           updatePackageVersionCache(cwd);
         }
         const source = declaration.node.source.value;
         const [packageName, ...extraPath] = source.split('/');
         const packageVersion = packageVersionCache[packageName];
-        const packageUrl = t.stringLiteral(`${cdn}/${packageName}@${packageVersion}${extraPath.length ? `/${extraPath.join('/')}` : ''}`);
-        const awaitCallExpression = t.callExpression(t.import(), [packageUrl]);
+        const packageUrl = buildPackageUrl(matches, cdn, packageName, packageVersion, extraPath);
+        const awaitCallExpressionCallee = getAwaitCallExpressionCallee(shim);
+        const awaitCallExpression = t.callExpression(awaitCallExpressionCallee, [packageUrl]);
         const initExpression = t.awaitExpression(awaitCallExpression);
         const importNamespace = declaration.node.specifiers.find((s) => s.type === 'ImportNamespaceSpecifier');
         if (importNamespace) {

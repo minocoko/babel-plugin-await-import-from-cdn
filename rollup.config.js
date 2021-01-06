@@ -5,5 +5,5 @@ export default {
     format: 'cjs',
     exports: 'auto',
   },
-  external: [ 'fs', 'path', 'child_process' ],
+  external: ['fs', 'path', 'child_process'],
 };
