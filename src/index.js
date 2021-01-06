@@ -40,10 +40,7 @@ export default ({ types: t }) => {
           const defaultImport = declaration.node.specifiers.find((s) => s.type === 'ImportDefaultSpecifier');
           const imports = declaration.node.specifiers.filter((s) => s.type === 'ImportSpecifier');
           if (defaultImport) {
-            const { name } = defaultImport.local;
-            const imported = defaultImport.imported ? defaultImport.imported.name : name;
-
-            properties.push(t.objectProperty(t.identifier('default'), t.identifier(imported)));
+            properties.push(t.objectProperty(t.identifier('default'), t.identifier(defaultImport.local.name)));
           }
           imports.forEach((m) => {
             const imported = m.imported.name;
