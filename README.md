@@ -27,6 +27,9 @@ Please check the example of this repo.
 ### cdn
 The host url of the cdn provider, for example https://unpkg.com
 
+### fallback
+If fallback is set, will try to load resources from cdn, then fallback
+
 ### shim
 Need shim to make import function works.
 

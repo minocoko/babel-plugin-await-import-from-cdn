@@ -3,6 +3,7 @@ import { execSync } from 'child_process';
 import plugin from '.';
 
 const cdn = 'https://unpkg.com';
+const fallback = 'https://cdn.jsdelivr.net/npm';
 const jestPackageVersionResult = execSync('yarn info jest|grep version:', { encoding: 'utf-8' });
 const jestPackageVersion = jestPackageVersionResult.replace(/[a-z ,:'\n]/g, '');
 
@@ -72,6 +73,38 @@ pluginTester({
   "https://unpkg.com/jest@${jestPackageVersion}/build/jest.js"
 );
 import "./index.css";`, // formatted
+    },
+  },
+});
+
+pluginTester({
+  plugin,
+  pluginOptions: {
+    cdn,
+    fallback,
+  },
+  tests: {
+    'Import namespace with fallback': {
+      code: 'import * as Jest from \'jest\';',
+      output: `let Jest;
+
+try {
+  Jest = import("${cdn}/jest@${jestPackageVersion}");
+} catch (err) {
+  Jest = import("${fallback}/jest@${jestPackageVersion}");
+}`, // formatted
+    },
+    'Import default with fallback': {
+      code: 'import Jest from \'jest\';',
+      output: `let jestResult;
+
+try {
+  jestResult = import("${cdn}/jest@${jestPackageVersion}");
+} catch (err) {
+  jestResult = import("${fallback}/jest@${jestPackageVersion}");
+}
+
+const { default: Jest } = jestResult;`, // formatted
     },
   },
 });
