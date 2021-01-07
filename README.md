@@ -25,7 +25,7 @@ Please check the example of this repo.
 
 ## Options
 ### cdn
-The host url of the cdn provider, for example https://unpkg.com
+The host url of the cdn provider, for example https://cdnjs.com, https://unpkg.com, https://skypack.dev
 
 ### fallback
 If fallback is set, will try to load resources from cdn, then fallback

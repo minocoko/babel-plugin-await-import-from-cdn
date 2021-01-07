@@ -2,6 +2,7 @@
   "name": "babel-plugin-cdn-import",
   "version": "1.0.7",
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "repository": "https://github.com/minocoko/babel-plugin-cdn-import.git",
   "homepage": "https://github.com/minocoko/babel-plugin-cdn-import#readme",
   "author": "Minco Ke <minocoke@outlook.com>",
@@ -30,7 +31,8 @@
     "eslint-plugin-import": "^2.22.1",
     "jest": "^26.6.0",
     "lerna": "^3.22.1",
-    "rollup": "^2.35.1"
+    "rollup": "^2.35.1",
+    "rollup-plugin-terser": "^7.0.2"
   },
   "dependencies": {
     "@babel/core": "^7.12.10",
