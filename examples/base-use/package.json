@@ -2,14 +2,14 @@
   "name": "base-use",
   "version": "1.0.0",
   "main": "index.js",
-  "module": "dist/index.js",
   "license": "MIT",
   "scripts": {
     "build": "webpack --config webpack.config.js",
-    "serve": "serve dist"
+    "serve": "serve build"
   },
   "dependencies": {
-    "react": "^17.0.1"
+    "react": "^17.0.1",
+    "systemjs": "^6.8.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
