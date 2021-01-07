@@ -43,6 +43,29 @@ export default ({ types: t }) => {
   )
     .replace(/\s+@/g, '');
 
+  const getPackageInfo = (source) => {
+    // TODO more case?
+    const [one, two, ...extraPath] = source.split('/');
+    let packageName = one;
+    let packageVersion = packageVersionCache[packageName];
+    if (packageVersion) {
+      return {
+        packageName,
+        packageVersion,
+        extraPath: (two ? [two, ...extraPath] : []),
+      };
+    }
+
+    packageName = `${one}/${two}`;
+    packageVersion = packageVersionCache[packageName];
+
+    return {
+      packageName,
+      packageVersion,
+      extraPath: (extraPath || []),
+    };
+  };
+
   return {
     visitor: {
       ImportDeclaration(declaration, state) {
@@ -85,8 +108,11 @@ export default ({ types: t }) => {
         if (!packageVersionCache) {
           updatePackageVersionCache(cwd);
         }
-        const [packageName, ...extraPath] = source.split('/');
-        const packageVersion = packageVersionCache[packageName];
+        const {
+          packageName,
+          packageVersion,
+          extraPath,
+        } = getPackageInfo(source);
 
         const importNamespace = declaration.node.specifiers.find((s) => s.type === 'ImportNamespaceSpecifier');
         let variableDeclarator;

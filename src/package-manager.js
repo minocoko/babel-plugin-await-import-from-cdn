@@ -8,7 +8,7 @@ export default (packageManager) => ({
       .map((line) => {
         const parts = line.split('@');
         const version = parts[parts.length - 1];
-        const name = parts.length === 2 ? parts[0] : parts[0] + parts[1];
+        const name = parts.length === 2 ? parts[0] : `@${parts[0]}${parts[1]}`;
         return [name, version];
       })
       .reduce((obj, [name, version]) => {

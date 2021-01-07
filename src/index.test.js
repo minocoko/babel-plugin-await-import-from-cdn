@@ -6,6 +6,8 @@ const cdn = 'https://unpkg.com';
 const fallback = 'https://cdn.jsdelivr.net/npm';
 const jestPackageVersionResult = execSync('yarn info jest|grep version:', { encoding: 'utf-8' });
 const jestPackageVersion = jestPackageVersionResult.replace(/[a-z ,:'\n]/g, '');
+const babelCorePackageVersionResult = execSync('yarn info @babel/core|grep version:', { encoding: 'utf-8' });
+const babelCorePackageVersion = babelCorePackageVersionResult.replace(/[a-z ,:'\n]/g, '');
 
 pluginTester({
   plugin,
@@ -20,6 +22,10 @@ pluginTester({
     'Import default': {
       code: 'import Jest from \'jest\';',
       output: `const { default: Jest } = await import("${cdn}/jest@${jestPackageVersion}");`,
+    },
+    'Import default with special case @ and /': {
+      code: "import { version } from '@babel/core';",
+      output: `const { version } = await import("${cdn}/@babel/core@${babelCorePackageVersion}");`,
     },
     'Import general': {
       code: 'import { run } from \'jest\';',
