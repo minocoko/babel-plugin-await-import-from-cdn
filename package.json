@@ -40,6 +40,6 @@
     "@babel/types": "^7.12.12"
   },
   "jest": {
-    "rootDir": "src"
+    "testPathIgnorePatterns": ["/node_modules/", "examples/"]
   }
 }
