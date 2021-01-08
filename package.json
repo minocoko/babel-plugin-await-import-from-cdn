@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-await-imort-from-cdn",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "repository": "https://github.com/minocoko/babel-plugin-await-imort-from-cdn.git",
