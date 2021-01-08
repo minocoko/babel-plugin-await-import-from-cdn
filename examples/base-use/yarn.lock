@@ -1105,9 +1105,9 @@ babel-loader@^8.2.2:
     schema-utils "^2.6.5"
 
 babel-plugin-cdn-import@^1.0.9:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/babel-plugin-cdn-import/-/babel-plugin-cdn-import-1.0.9.tgz#9dffc36bb35283d7726bb404b258b26c17cc3ba5"
-  integrity sha512-/kzuvpWNw1MzytwP6EGibbEZc6SrZmG7+03D8Of/8n2T1kTb/kniJgsrknUVdlAxovtM/UmbWdPfmKf5fLGZww==
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/babel-plugin-cdn-import/-/babel-plugin-cdn-import-1.0.10.tgz#ebd6c49bdbd4e045f04b83484bb00d7e80d8c0d3"
+  integrity sha512-7/GcFupuS3rAelIZshOmJlBqtCqKZKgaKdtsQbPIenDZ8HdDZ2ycQ8vNggI5MPDbAq9XqizBJKB/4zMLq0eVLA==
   dependencies:
     "@babel/core" "^7.12.10"
     "@babel/preset-env" "^7.12.11"
@@ -1682,9 +1682,9 @@ json5@^2.1.2:
     minimist "^1.2.5"
 
 loader-runner@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/loader-runner/-/loader-runner-4.1.0.tgz#f70bc0c29edbabdf2043e7ee73ccc3fe1c96b42d"
-  integrity sha512-oR4lB4WvwFoC70ocraKhn5nkKSs23t57h9udUgw8o0iH8hMXeEoRuUgfcvgUwAJ1ZpRqBvcou4N2SMvM1DwMrA==
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/loader-runner/-/loader-runner-4.2.0.tgz#d7022380d66d14c5fb1d496b89864ebcfd478384"
+  integrity sha512-92+huvxMvYlMzMt0iIOukcwYBFpkYJdpl2xsZ7LrlayO7E8SOv+JJUEK17B/dJIHAOLMfh2dZZ/Y18WgmGtYNw==
 
 loader-utils@^1.4.0:
   version "1.4.0"

@@ -9,23 +9,56 @@
 ![Build](https://github.com/minocoko/babel-plugin-cdn-import/workflows/build/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/minocoko/babel-plugin-cdn-import/badge.svg?branch=main)](https://coveralls.io/github/minocoko/babel-plugin-cdn-import?branch=main)
 
+This plugin allow you to load resources from CDN by using [top level await](https://github.com/tc39/proposal-top-level-await#dependency-fallbacks) and import function
+
+For example, following code
+```javascript
+import jQuery from 'jquery';
+```
+will transpile into
+```javascript
+let jQuery;
+try {
+  jQuery = await import('https://cdn-a.com/jQuery');
+} catch {
+  jQuery = await import('https://cdn-b.com/jQuery');
+}
+```
+
 ## Install
 ```bash
-yarn add -D babel-plugin-cdn-import
+yarn add -D babel-plugin-cdn-import @babel/plugin-syntax-top-level-await
 ```
 or
-```
-npm i -D babel-plugin-cdn-import
+```bash
+npm i -D babel-plugin-cdn-import @babel/plugin-syntax-top-level-await
 ```
 
 
 ## Usage
-Please check the example of this repo.
+```javascript
+module.exports = {
+  presets: [
+    '@babel/preset-env',
+  ],
+  plugins: [
+    '@babel/plugin-syntax-top-level-await',
+    ['babel-plugin-cdn-import', {
+      cdn: 'https://cdn.skypack.dev',
+      webpackIgnore: true,
+      matches: {
+        '^react$': true,
+      },
+    }],
+  ],
+};
+```
+For more detail, please check the base use example of this repo
 
 
 ## Options
 ### cdn
-The host url of the cdn provider, for example https://cdnjs.com, https://unpkg.com, https://skypack.dev
+The host url of the cdn provider, for example https://skypack.dev, https://cdnjs.com, https://unpkg.com
 
 ### webpackIgnore
 if build application with webpack, set webpackIgnore to true;
@@ -34,4 +67,4 @@ if build application with webpack, set webpackIgnore to true;
 If fallback is set, will try to load resources from cdn, then fallback
 
 ### matches
-Only matched package will transpile to use CDN resources.
+if matches is set, Only matched package will transpile to use CDN resources
