@@ -1,13 +1,13 @@
 <div align="center">
-<h1>babel-plugin-cdn-import</h1>
+<h1>babel-plugin-await-imort-from-cdn</h1>
 
 <p>Allows you to load resources from CDN</p>
 </div>
 
 ---
 
-![Build](https://github.com/minocoko/babel-plugin-cdn-import/workflows/build/badge.svg)
-[![Coverage Status](https://coveralls.io/repos/github/minocoko/babel-plugin-cdn-import/badge.svg?branch=main)](https://coveralls.io/github/minocoko/babel-plugin-cdn-import?branch=main)
+![Build](https://github.com/minocoko/babel-plugin-await-imort-from-cdn/workflows/build/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/minocoko/babel-plugin-await-imort-from-cdn/badge.svg?branch=main)](https://coveralls.io/github/minocoko/babel-plugin-await-imort-from-cdn?branch=main)
 
 This plugin allow you to load resources from CDN by using [top level await](https://github.com/tc39/proposal-top-level-await#dependency-fallbacks) and import function
 
@@ -27,11 +27,11 @@ try {
 
 ## Install
 ```bash
-yarn add -D babel-plugin-cdn-import @babel/plugin-syntax-top-level-await
+yarn add -D babel-plugin-await-imort-from-cdn @babel/plugin-syntax-top-level-await
 ```
 or
 ```bash
-npm i -D babel-plugin-cdn-import @babel/plugin-syntax-top-level-await
+npm i -D babel-plugin-await-imort-from-cdn @babel/plugin-syntax-top-level-await
 ```
 
 
@@ -43,7 +43,7 @@ module.exports = {
   ],
   plugins: [
     '@babel/plugin-syntax-top-level-await',
-    ['babel-plugin-cdn-import', {
+    ['babel-plugin-await-imort-from-cdn', {
       cdn: 'https://cdn.skypack.dev',
       webpackIgnore: true,
       matches: {

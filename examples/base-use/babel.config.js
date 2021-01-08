@@ -4,7 +4,7 @@ module.exports = {
   ],
   plugins: [
     '@babel/plugin-syntax-top-level-await',
-    ['babel-plugin-cdn-import', {
+    ['babel-plugin-await-imort-from-cdn', {
       cdn: 'https://cdn.skypack.dev',
       webpackIgnore: true,
       matches: {

@@ -1104,9 +1104,9 @@ babel-loader@^8.2.2:
     make-dir "^3.1.0"
     schema-utils "^2.6.5"
 
-babel-plugin-cdn-import@^1.0.9:
+babel-plugin-await-imort-from-cdn@^1.0.9:
   version "1.0.10"
-  resolved "https://registry.yarnpkg.com/babel-plugin-cdn-import/-/babel-plugin-cdn-import-1.0.10.tgz#ebd6c49bdbd4e045f04b83484bb00d7e80d8c0d3"
+  resolved "https://registry.yarnpkg.com/babel-plugin-await-imort-from-cdn/-/babel-plugin-await-imort-from-cdn-1.0.10.tgz#ebd6c49bdbd4e045f04b83484bb00d7e80d8c0d3"
   integrity sha512-7/GcFupuS3rAelIZshOmJlBqtCqKZKgaKdtsQbPIenDZ8HdDZ2ycQ8vNggI5MPDbAq9XqizBJKB/4zMLq0eVLA==
   dependencies:
     "@babel/core" "^7.12.10"
