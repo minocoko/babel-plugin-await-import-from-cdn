@@ -27,7 +27,7 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "build": "rollup -c",
-    "prepublish": "yarn build"
+    "prepare": "yarn build"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
