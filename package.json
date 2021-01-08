@@ -1,10 +1,10 @@
 {
-  "name": "babel-plugin-await-imort-from-cdn",
+  "name": "babel-plugin-await-import-from-cdn",
   "version": "1.0.12",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
-  "repository": "https://github.com/minocoko/babel-plugin-await-imort-from-cdn.git",
-  "homepage": "https://github.com/minocoko/babel-plugin-await-imort-from-cdn#readme",
+  "repository": "https://github.com/minocoko/babel-plugin-await-import-from-cdn.git",
+  "homepage": "https://github.com/minocoko/babel-plugin-await-import-from-cdn#readme",
   "author": "Minco Ke <minocoke@outlook.com>",
   "license": "MIT",
   "files": [

@@ -15,7 +15,7 @@
     "@babel/plugin-syntax-top-level-await": "^7.12.1",
     "@babel/preset-env": "^7.12.11",
     "babel-loader": "^8.2.2",
-    "babel-plugin-await-imort-from-cdn": "^1.0.9",
+    "babel-plugin-await-import-from-cdn": "^1.0.9",
     "serve": "^11.3.2",
     "webpack": "^5.11.1",
     "webpack-cli": "^4.3.1"
