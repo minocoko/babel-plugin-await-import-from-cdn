@@ -74,10 +74,11 @@ export default ({ types: t }) => ({
       const buildPackageUrl = (cdnUrl, packageName, packageVersion, extraPath) => {
         let url = `${cdnUrl}/${packageName}@${packageVersion}${extraPath.length ? `/${extraPath.join('/')}` : ''}`;
         if (matches) {
-          for (let index = 0; index < matches.length; index += 1) {
-            const match = matches[index];
-            if (match[0].test(packageName)) {
-              url += match[1];
+          const matchesKeys = Object.keys(matches);
+          for (let index = 0; index < matchesKeys.length; index += 1) {
+            const key = matchesKeys[index];
+            if (new RegExp(key).test(packageName) && typeof (matches[key]) === 'string') {
+              url += matches[key];
               break;
             }
           }
@@ -91,9 +92,10 @@ export default ({ types: t }) => ({
 
       const source = declaration.node.source.value;
       if (matches) {
-        for (let index = 0; index < matches.length; index += 1) {
-          const match = matches[index];
-          if (!match[0].test(source)) {
+        const matchesKeys = Object.keys(matches);
+        for (let index = 0; index < matchesKeys.length; index += 1) {
+          const key = matchesKeys[index];
+          if (!new RegExp(key).test(source)) {
             return;
           }
         }

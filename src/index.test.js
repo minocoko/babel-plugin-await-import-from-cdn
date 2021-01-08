@@ -48,9 +48,9 @@ pluginTester({
   plugin,
   pluginOptions: {
     cdn,
-    matches: [
-      [/^jest$/, ''],
-    ],
+    matches: {
+      '^jest$': true,
+    },
   },
   tests: {
     'Import namespace with matches': {
@@ -70,9 +70,9 @@ pluginTester({
   plugin,
   pluginOptions: {
     cdn,
-    matches: [
-      [/^jest$/, '/build/jest.js'],
-    ],
+    matches: {
+      '^jest$': '/build/jest.js',
+    },
   },
   tests: {
     'Import namespace with matches & extra path': {

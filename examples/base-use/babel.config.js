@@ -7,9 +7,9 @@ module.exports = {
     ['babel-plugin-cdn-import', {
       cdn: 'https://cdn.skypack.dev',
       webpackIgnore: true,
-      matches: [
-        [/^react$/, ''],
-      ],
+      matches: {
+        '^react$': true,
+      },
     }],
   ],
 };
