@@ -6,9 +6,11 @@
 
 ---
 
-![Build](https://github.com/minocoko/babel-plugin-await-import-from-cdn/workflows/build/badge.svg)
+[![Build](https://github.com/minocoko/babel-plugin-await-import-from-cdn/workflows/build/badge.svg)](https://github.com/minocoko/babel-plugin-await-import-from-cdn/actions)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9398e3aa4c4e4874a862ead03536db1f)](https://app.codacy.com/gh/minocoko/babel-plugin-await-import-from-cdn?utm_source=github.com&utm_medium=referral&utm_content=minocoko/babel-plugin-await-import-from-cdn&utm_campaign=Badge_Grade)
 [![Coverage Status](https://coveralls.io/repos/github/minocoko/babel-plugin-await-import-from-cdn/badge.svg?branch=main)](https://coveralls.io/github/minocoko/babel-plugin-await-import-from-cdn?branch=main)
+[![NPM Version](https://img.shields.io/npm/v/babel-plugin-await-import-from-cdn)](https://www.npmjs.com/package/babel-plugin-await-import-from-cdn)
+[![NPM License](https://img.shields.io/npm/l/babel-plugin-await-import-from-cdn)](https://github.com/minocoko/babel-plugin-await-import-from-cdn/blob/main/LICENSE)
 
 This plugin allow you to load resources from CDN by using [top level await](https://github.com/tc39/proposal-top-level-await#dependency-fallbacks) and import function
 
