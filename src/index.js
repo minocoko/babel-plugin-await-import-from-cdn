@@ -43,131 +43,119 @@ const getPackageInfo = (source) => {
   };
 };
 
-export default ({ types: t }) => {
-  const getAwaitCallExpressionCallee = (shim) => {
-    if (shim) {
-      return t.memberExpression(t.identifier(shim), t.identifier('import'));
-    }
+export default ({ types: t }) => ({
+  visitor: {
+    ImportDeclaration(declaration, state) {
+      const {
+        cwd,
+        opts: {
+          cdn, matches, fallback, webpackIgnore,
+        },
+      } = state;
 
-    return t.import();
-  };
+      const getNameObjectPattern = () => {
+        const properties = [];
+        const defaultImport = declaration.node.specifiers.find((s) => s.type === 'ImportDefaultSpecifier');
+        const imports = declaration.node.specifiers.filter((s) => s.type === 'ImportSpecifier');
+        if (defaultImport) {
+          properties.push(t.objectProperty(t.identifier('default'), t.identifier(defaultImport.local.name)));
+        }
+        imports.forEach((m) => {
+          const imported = m.imported.name;
+          const { name } = m.local;
+          const shorthand = imported === name;
+          properties.push(
+            t.objectProperty(t.identifier(imported), t.identifier(name), false, shorthand),
+          );
+        });
 
-  return {
-    visitor: {
-      ImportDeclaration(declaration, state) {
-        const {
-          cwd,
-          opts: {
-            cdn, shim, matches, fallback, webpackIgnore,
-          },
-        } = state;
-
-        const getNameObjectPattern = () => {
-          const properties = [];
-          const defaultImport = declaration.node.specifiers.find((s) => s.type === 'ImportDefaultSpecifier');
-          const imports = declaration.node.specifiers.filter((s) => s.type === 'ImportSpecifier');
-          if (defaultImport) {
-            properties.push(t.objectProperty(t.identifier('default'), t.identifier(defaultImport.local.name)));
-          }
-          imports.forEach((m) => {
-            const imported = m.imported.name;
-            const { name } = m.local;
-            const shorthand = imported === name;
-            properties.push(
-              t.objectProperty(t.identifier(imported), t.identifier(name), false, shorthand),
-            );
-          });
-
-          return t.objectPattern(properties);
-        };
-        const buildPackageUrl = (cdnUrl, packageName, packageVersion, extraPath) => {
-          let url = `${cdnUrl}/${packageName}@${packageVersion}${extraPath.length ? `/${extraPath.join('/')}` : ''}`;
-          if (matches) {
-            for (let index = 0; index < matches.length; index += 1) {
-              const match = matches[index];
-              if (match[0].test(packageName)) {
-                url += match[1];
-                break;
-              }
-            }
-          }
-          const urlStringLiteral = t.stringLiteral(url);
-          if (webpackIgnore) {
-            t.addComment(urlStringLiteral, 'leading', ' webpackIgnore: true ');
-          }
-          return urlStringLiteral;
-        };
-
-        const source = declaration.node.source.value;
+        return t.objectPattern(properties);
+      };
+      const buildPackageUrl = (cdnUrl, packageName, packageVersion, extraPath) => {
+        let url = `${cdnUrl}/${packageName}@${packageVersion}${extraPath.length ? `/${extraPath.join('/')}` : ''}`;
         if (matches) {
           for (let index = 0; index < matches.length; index += 1) {
             const match = matches[index];
-            if (!match[0].test(source)) {
-              return;
+            if (match[0].test(packageName)) {
+              url += match[1];
+              break;
             }
           }
         }
-
-        if (!packageVersionCache) {
-          updatePackageVersionCache(cwd);
+        const urlStringLiteral = t.stringLiteral(url);
+        if (webpackIgnore) {
+          t.addComment(urlStringLiteral, 'leading', ' webpackIgnore: true ');
         }
-        const {
-          packageName,
-          packageVersion,
-          extraPath,
-        } = getPackageInfo(source);
+        return urlStringLiteral;
+      };
 
-        const importNamespace = declaration.node.specifiers.find((s) => s.type === 'ImportNamespaceSpecifier');
-        let variableDeclarator;
-        if (fallback) {
-          const getAwaitExpressionStatement = (name, url) => {
-            const awaitCallExpressionCallee = getAwaitCallExpressionCallee(shim);
-            const packageUrl = buildPackageUrl(
-              url, packageName, packageVersion, extraPath,
-            );
-            const awaitCallExpression = t.callExpression(awaitCallExpressionCallee, [packageUrl]);
-            const assignmentExpression = t.assignmentExpression('=', name, awaitCallExpression);
-            const expressionStatement = t.expressionStatement(assignmentExpression);
-            return t.blockStatement([expressionStatement]);
-          };
-
-          const nameIdentifier = t.identifier(importNamespace ? importNamespace.local.name : `${camelize(packageName)}Result`);
-          variableDeclarator = t.variableDeclarator(nameIdentifier, null);
-          const variableDeclaration = t.variableDeclaration('let', [variableDeclarator]);
-          const tryBlockStatement = getAwaitExpressionStatement(nameIdentifier, cdn);
-          const catchBlockStatement = getAwaitExpressionStatement(nameIdentifier, fallback);
-          const catchClause = t.catchClause(t.identifier('err'), catchBlockStatement);
-          const tryStatement = t.tryStatement(tryBlockStatement, catchClause);
-          if (importNamespace) {
-            declaration.replaceWith(variableDeclaration);
-            declaration.parent.body.push(tryStatement);
-          } else {
-            const nameObjectPattern = getNameObjectPattern();
-            declaration.replaceWith(variableDeclaration);
-            declaration.parent.body.push(tryStatement);
-            const a = t.variableDeclarator(nameObjectPattern, nameIdentifier);
-            const b = t.variableDeclaration('const', [a]);
-            declaration.parent.body.push(b);
+      const source = declaration.node.source.value;
+      if (matches) {
+        for (let index = 0; index < matches.length; index += 1) {
+          const match = matches[index];
+          if (!match[0].test(source)) {
+            return;
           }
-        } else {
-          const awaitCallExpressionCallee = getAwaitCallExpressionCallee(shim);
+        }
+      }
+
+      if (!packageVersionCache) {
+        updatePackageVersionCache(cwd);
+      }
+      const {
+        packageName,
+        packageVersion,
+        extraPath,
+      } = getPackageInfo(source);
+
+      const importNamespace = declaration.node.specifiers.find((s) => s.type === 'ImportNamespaceSpecifier');
+      let variableDeclarator;
+      if (fallback) {
+        const getAwaitExpressionStatement = (name, url) => {
           const packageUrl = buildPackageUrl(
-            cdn, packageName, packageVersion, extraPath,
+            url, packageName, packageVersion, extraPath,
           );
-          const awaitCallExpression = t.callExpression(awaitCallExpressionCallee, [packageUrl]);
-          const initExpression = t.awaitExpression(awaitCallExpression);
-          if (importNamespace) {
-            const nameIdentifier = t.identifier(importNamespace.local.name);
-            variableDeclarator = t.variableDeclarator(nameIdentifier, initExpression);
-          } else {
-            const nameObjectPattern = getNameObjectPattern();
-            variableDeclarator = t.variableDeclarator(nameObjectPattern, initExpression);
-          }
+          const awaitCallExpression = t.callExpression(t.import(), [packageUrl]);
+          const assignmentExpression = t.assignmentExpression('=', name, awaitCallExpression);
+          const expressionStatement = t.expressionStatement(assignmentExpression);
+          return t.blockStatement([expressionStatement]);
+        };
 
-          const variableDeclaration = t.variableDeclaration('const', [variableDeclarator]);
+        const nameIdentifier = t.identifier(importNamespace ? importNamespace.local.name : `${camelize(packageName)}Result`);
+        variableDeclarator = t.variableDeclarator(nameIdentifier, null);
+        const variableDeclaration = t.variableDeclaration('let', [variableDeclarator]);
+        const tryBlockStatement = getAwaitExpressionStatement(nameIdentifier, cdn);
+        const catchBlockStatement = getAwaitExpressionStatement(nameIdentifier, fallback);
+        const catchClause = t.catchClause(t.identifier('err'), catchBlockStatement);
+        const tryStatement = t.tryStatement(tryBlockStatement, catchClause);
+        if (importNamespace) {
           declaration.replaceWith(variableDeclaration);
+          declaration.parent.body.push(tryStatement);
+        } else {
+          const nameObjectPattern = getNameObjectPattern();
+          declaration.replaceWith(variableDeclaration);
+          declaration.parent.body.push(tryStatement);
+          const a = t.variableDeclarator(nameObjectPattern, nameIdentifier);
+          const b = t.variableDeclaration('const', [a]);
+          declaration.parent.body.push(b);
         }
-      },
+      } else {
+        const packageUrl = buildPackageUrl(
+          cdn, packageName, packageVersion, extraPath,
+        );
+        const awaitCallExpression = t.callExpression(t.import(), [packageUrl]);
+        const initExpression = t.awaitExpression(awaitCallExpression);
+        if (importNamespace) {
+          const nameIdentifier = t.identifier(importNamespace.local.name);
+          variableDeclarator = t.variableDeclarator(nameIdentifier, initExpression);
+        } else {
+          const nameObjectPattern = getNameObjectPattern();
+          variableDeclarator = t.variableDeclarator(nameObjectPattern, initExpression);
+        }
+
+        const variableDeclaration = t.variableDeclaration('const', [variableDeclarator]);
+        declaration.replaceWith(variableDeclaration);
+      }
     },
-  };
-};
+  },
+});

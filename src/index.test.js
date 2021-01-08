@@ -48,45 +48,6 @@ pluginTester({
   plugin,
   pluginOptions: {
     cdn,
-    shim: 'system',
-  },
-  tests: {
-    'Import namespace with system.import': {
-      code: 'import * as Jest from \'jest\';',
-      output: `const Jest = await system.import("${cdn}/jest@${jestPackageVersion}");`,
-    },
-  },
-});
-
-pluginTester({
-  plugin,
-  pluginOptions: {
-    cdn,
-    shim: 'system',
-    matches: [
-      [/^jest$/, '/build/jest.js'],
-    ],
-  },
-  tests: {
-    'Import namespace with system.import': {
-      code: 'import * as Jest from \'jest\';',
-      output: `const Jest = await system.import("${cdn}/jest@${jestPackageVersion}/build/jest.js");`,
-    },
-    'Multiple import with system.import': {
-      code: `import jest from 'jest';
-      import './index.css';`,
-      output: `const { default: jest } = await system.import(
-  "https://unpkg.com/jest@${jestPackageVersion}/build/jest.js"
-);
-import "./index.css";`, // formatted
-    },
-  },
-});
-
-pluginTester({
-  plugin,
-  pluginOptions: {
-    cdn,
     fallback,
   },
   tests: {

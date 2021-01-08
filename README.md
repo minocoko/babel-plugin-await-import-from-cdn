@@ -33,8 +33,5 @@ if build application with webpack, set webpackIgnore to true;
 ### fallback
 If fallback is set, will try to load resources from cdn, then fallback
 
-### shim
-Need shim to make import function works.
-
 ### matches
 Only matched package will transpile to use CDN resources.
