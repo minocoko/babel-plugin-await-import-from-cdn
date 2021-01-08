@@ -6,7 +6,6 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: 'index.js',
-    module: true,
   },
   module: {
     rules: [
@@ -21,6 +20,5 @@ module.exports = {
   },
   experiments: {
     topLevelAwait: true,
-    outputModule: true,
   },
 };
