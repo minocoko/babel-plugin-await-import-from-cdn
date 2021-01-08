@@ -1104,10 +1104,10 @@ babel-loader@^8.2.2:
     make-dir "^3.1.0"
     schema-utils "^2.6.5"
 
-babel-plugin-cdn-import@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/babel-plugin-cdn-import/-/babel-plugin-cdn-import-1.0.3.tgz#bcc32c5de6bda7ae4d6b367a49b7e65d5b70a81c"
-  integrity sha512-EQAdDsuKt6WGAhPMqpxM0dIRxWTBm4QrboTitSUhfXa4K9Pp7gpCGkZOVQIlqwwope89ZCH5pSCum7tUIk4EuQ==
+babel-plugin-cdn-import@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/babel-plugin-cdn-import/-/babel-plugin-cdn-import-1.0.9.tgz#9dffc36bb35283d7726bb404b258b26c17cc3ba5"
+  integrity sha512-/kzuvpWNw1MzytwP6EGibbEZc6SrZmG7+03D8Of/8n2T1kTb/kniJgsrknUVdlAxovtM/UmbWdPfmKf5fLGZww==
   dependencies:
     "@babel/core" "^7.12.10"
     "@babel/preset-env" "^7.12.11"
@@ -2249,11 +2249,6 @@ supports-color@^7.0.0:
   integrity sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==
   dependencies:
     has-flag "^4.0.0"
-
-systemjs@^6.8.3:
-  version "6.8.3"
-  resolved "https://registry.yarnpkg.com/systemjs/-/systemjs-6.8.3.tgz#67e27f49242e9d81c2b652b204ae54e8bfcc75a3"
-  integrity sha512-UcTY+FEA1B7e+bpJk1TI+a9Na6LG7wFEqW7ED16cLqLuQfI/9Ri0rsXm3tKlIgNoHyLHZycjdAOijzNbzelgwA==
 
 tapable@^2.1.1, tapable@^2.2.0:
   version "2.2.0"

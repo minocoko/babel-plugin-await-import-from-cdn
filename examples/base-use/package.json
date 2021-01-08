@@ -8,15 +8,14 @@
     "serve": "serve build"
   },
   "dependencies": {
-    "react": "^17.0.1",
-    "systemjs": "^6.8.3"
+    "react": "^17.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/plugin-syntax-top-level-await": "^7.12.1",
     "@babel/preset-env": "^7.12.11",
     "babel-loader": "^8.2.2",
-    "babel-plugin-cdn-import": "^1.0.3",
+    "babel-plugin-cdn-import": "^1.0.9",
     "serve": "^11.3.2",
     "webpack": "^5.11.1",
     "webpack-cli": "^4.3.1"

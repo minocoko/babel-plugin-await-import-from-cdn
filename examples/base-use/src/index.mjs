@@ -1,4 +1,3 @@
-import 'systemjs';
-import React from 'react';
+import React, { useState } from 'react';
 
-console.log(React);
+console.log(React, useState);
