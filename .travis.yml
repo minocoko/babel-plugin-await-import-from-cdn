@@ -2,7 +2,6 @@ repo_token: SBMdSVwFVDLcXd4wqf7lTFxDEXQvxjgZG
 language: node_js
 node_js:
 - "14"
-- node
 
 script: echo "Running tests against $(node -v)..."
 
