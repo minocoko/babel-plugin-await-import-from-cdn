@@ -114,3 +114,20 @@ const { default: Jest } = jestResult;`, // formatted
     },
   },
 });
+
+pluginTester({
+  plugin,
+  pluginOptions: {
+    cdn,
+    webpackIgnore: true,
+  },
+  tests: {
+    'Import namespace with webpackIgnore': {
+      code: 'import * as Jest from \'jest\';',
+      output: `const Jest = await import(
+  /* webpackIgnore: true */
+  "${cdn}/jest@${jestPackageVersion}"
+);`,
+    },
+  },
+});

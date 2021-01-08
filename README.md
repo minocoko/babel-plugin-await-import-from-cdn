@@ -27,6 +27,9 @@ Please check the example of this repo.
 ### cdn
 The host url of the cdn provider, for example https://cdnjs.com, https://unpkg.com, https://skypack.dev
 
+### webpackIgnore
+if build application with webpack, set webpackIgnore to true;
+
 ### fallback
 If fallback is set, will try to load resources from cdn, then fallback
 

@@ -4,17 +4,46 @@ import packageManagers from './package-manager';
 
 let packageVersionCache;
 
-export default ({ types: t }) => {
-  const updatePackageVersionCache = (cwd) => {
-    // check yarn.lock or package-lock.json
-    let packageManager;
-    const exists = fs.existsSync(path.join(cwd, 'yarn.lock'));
-    if (exists) {
-      packageManager = packageManagers('yarn');
-    }
-    packageVersionCache = packageManager.list();
-  };
+const updatePackageVersionCache = (cwd) => {
+  // check yarn.lock or package-lock.json
+  let packageManager;
+  const exists = fs.existsSync(path.join(cwd, 'yarn.lock'));
+  if (exists) {
+    packageManager = packageManagers('yarn');
+  }
+  packageVersionCache = packageManager.list();
+};
 
+const camelize = (str) => str.replace(
+  /(?:^\w|[A-Z]|\b\w)/g,
+  (word, index) => (index === 0 ? word.toLowerCase() : word.toUpperCase()),
+)
+  .replace(/\s+@/g, '');
+
+const getPackageInfo = (source) => {
+  // TODO more case?
+  const [one, two, ...extraPath] = source.split('/');
+  let packageName = one;
+  let packageVersion = packageVersionCache[packageName];
+  if (packageVersion) {
+    return {
+      packageName,
+      packageVersion,
+      extraPath: (two ? [two, ...extraPath] : []),
+    };
+  }
+
+  packageName = `${one}/${two}`;
+  packageVersion = packageVersionCache[packageName];
+
+  return {
+    packageName,
+    packageVersion,
+    extraPath: (extraPath || []),
+  };
+};
+
+export default ({ types: t }) => {
   const getAwaitCallExpressionCallee = (shim) => {
     if (shim) {
       return t.memberExpression(t.identifier(shim), t.identifier('import'));
@@ -23,52 +52,16 @@ export default ({ types: t }) => {
     return t.import();
   };
 
-  const buildPackageUrl = (matches, cdn, packageName, packageVersion, extraPath) => {
-    let url = `${cdn}/${packageName}@${packageVersion}${extraPath.length ? `/${extraPath.join('/')}` : ''}`;
-    if (matches) {
-      for (let index = 0; index < matches.length; index += 1) {
-        const match = matches[index];
-        if (match[0].test(packageName)) {
-          url += match[1];
-          break;
-        }
-      }
-    }
-    return t.stringLiteral(url);
-  };
-
-  const camelize = (str) => str.replace(
-    /(?:^\w|[A-Z]|\b\w)/g,
-    (word, index) => (index === 0 ? word.toLowerCase() : word.toUpperCase()),
-  )
-    .replace(/\s+@/g, '');
-
-  const getPackageInfo = (source) => {
-    // TODO more case?
-    const [one, two, ...extraPath] = source.split('/');
-    let packageName = one;
-    let packageVersion = packageVersionCache[packageName];
-    if (packageVersion) {
-      return {
-        packageName,
-        packageVersion,
-        extraPath: (two ? [two, ...extraPath] : []),
-      };
-    }
-
-    packageName = `${one}/${two}`;
-    packageVersion = packageVersionCache[packageName];
-
-    return {
-      packageName,
-      packageVersion,
-      extraPath: (extraPath || []),
-    };
-  };
-
   return {
     visitor: {
       ImportDeclaration(declaration, state) {
+        const {
+          cwd,
+          opts: {
+            cdn, shim, matches, fallback, webpackIgnore,
+          },
+        } = state;
+
         const getNameObjectPattern = () => {
           const properties = [];
           const defaultImport = declaration.node.specifiers.find((s) => s.type === 'ImportDefaultSpecifier');
@@ -87,14 +80,24 @@ export default ({ types: t }) => {
 
           return t.objectPattern(properties);
         };
+        const buildPackageUrl = (cdnUrl, packageName, packageVersion, extraPath) => {
+          let url = `${cdnUrl}/${packageName}@${packageVersion}${extraPath.length ? `/${extraPath.join('/')}` : ''}`;
+          if (matches) {
+            for (let index = 0; index < matches.length; index += 1) {
+              const match = matches[index];
+              if (match[0].test(packageName)) {
+                url += match[1];
+                break;
+              }
+            }
+          }
+          const urlStringLiteral = t.stringLiteral(url);
+          if (webpackIgnore) {
+            t.addComment(urlStringLiteral, 'leading', ' webpackIgnore: true ');
+          }
+          return urlStringLiteral;
+        };
 
-        // console.log(state)
-        const {
-          cwd,
-          opts: {
-            cdn, shim, matches, fallback,
-          },
-        } = state;
         const source = declaration.node.source.value;
         if (matches) {
           for (let index = 0; index < matches.length; index += 1) {
@@ -120,7 +123,7 @@ export default ({ types: t }) => {
           const getAwaitExpressionStatement = (name, url) => {
             const awaitCallExpressionCallee = getAwaitCallExpressionCallee(shim);
             const packageUrl = buildPackageUrl(
-              matches, url, packageName, packageVersion, extraPath,
+              url, packageName, packageVersion, extraPath,
             );
             const awaitCallExpression = t.callExpression(awaitCallExpressionCallee, [packageUrl]);
             const assignmentExpression = t.assignmentExpression('=', name, awaitCallExpression);
@@ -149,7 +152,7 @@ export default ({ types: t }) => {
         } else {
           const awaitCallExpressionCallee = getAwaitCallExpressionCallee(shim);
           const packageUrl = buildPackageUrl(
-            matches, cdn, packageName, packageVersion, extraPath,
+            cdn, packageName, packageVersion, extraPath,
           );
           const awaitCallExpression = t.callExpression(awaitCallExpressionCallee, [packageUrl]);
           const initExpression = t.awaitExpression(awaitCallExpression);
