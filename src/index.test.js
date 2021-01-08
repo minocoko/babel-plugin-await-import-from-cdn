@@ -48,6 +48,44 @@ pluginTester({
   plugin,
   pluginOptions: {
     cdn,
+    matches: [
+      [/^jest$/, ''],
+    ],
+  },
+  tests: {
+    'Import namespace with matches': {
+      code: 'import * as Jest from \'jest\';',
+      output: `const Jest = await import("${cdn}/jest@${jestPackageVersion}");`,
+    },
+    'Multiple import with matches': {
+      code: `import jest from 'jest';
+      import './index.css';`,
+      output: `const { default: jest } = await import("${cdn}/jest@${jestPackageVersion}");
+import "./index.css";`, // formatted
+    },
+  },
+});
+
+pluginTester({
+  plugin,
+  pluginOptions: {
+    cdn,
+    matches: [
+      [/^jest$/, '/build/jest.js'],
+    ],
+  },
+  tests: {
+    'Import namespace with matches & extra path': {
+      code: 'import * as Jest from \'jest\';',
+      output: `const Jest = await import("${cdn}/jest@${jestPackageVersion}/build/jest.js");`,
+    },
+  },
+});
+
+pluginTester({
+  plugin,
+  pluginOptions: {
+    cdn,
     fallback,
   },
   tests: {
