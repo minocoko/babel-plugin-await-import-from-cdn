@@ -12,9 +12,15 @@
   ],
   "keywords": [
     "cdn",
+    "assets",
     "import",
-    "top level await",
-    "dependency fallbacks"
+    "dynamic",
+    "url",
+    "top",
+    "level",
+    "await",
+    "dependency",
+    "fallbacks"
   ],
   "scripts": {
     "lint": "eslint src babel.config.js rollup.config.js --fix",
