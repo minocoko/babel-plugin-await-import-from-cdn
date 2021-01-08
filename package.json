@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-cdn-import",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "repository": "https://github.com/minocoko/babel-plugin-cdn-import.git",
@@ -40,6 +40,9 @@
     "@babel/types": "^7.12.12"
   },
   "jest": {
-    "testPathIgnorePatterns": ["/node_modules/", "examples/"]
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "examples/"
+    ]
   }
 }
