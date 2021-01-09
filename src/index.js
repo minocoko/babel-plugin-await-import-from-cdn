@@ -10,6 +10,8 @@ const updatePackageVersionCache = (cwd) => {
   const exists = fs.existsSync(path.join(cwd, 'yarn.lock'));
   if (exists) {
     packageManager = packageManagers('yarn');
+  } else {
+    packageManager = packageManagers('npm');
   }
   packageVersionCache = packageManager.list();
 };
@@ -39,7 +41,7 @@ const getPackageInfo = (source) => {
   return {
     packageName,
     packageVersion,
-    extraPath: (extraPath || []),
+    extraPath,
   };
 };
 
