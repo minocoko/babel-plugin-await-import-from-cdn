@@ -25,7 +25,8 @@
   "scripts": {
     "lint": "eslint src babel.config.js rollup.config.js --fix",
     "test": "jest",
-    "test:coverage": "jest --coverage",
+    "coverage": "jest --coverage",
+    "coverage:ci": "jest --coverage --coverageReporters=text-lcov|coveralls",
     "build": "rollup -c",
     "prepare": "yarn build"
   },
