@@ -8,6 +8,8 @@ const jestPackageVersionResult = execSync('yarn info jest|grep version:', { enco
 const jestPackageVersion = jestPackageVersionResult.replace(/[a-z ,:'\n]/g, '');
 const babelCorePackageVersionResult = execSync('yarn info @babel/core|grep version:', { encoding: 'utf-8' });
 const babelCorePackageVersion = babelCorePackageVersionResult.replace(/[a-z ,:'\n]/g, '');
+const jsonStreamPackageVersionResult = execSync('yarn info JSONStream|grep version:', { encoding: 'utf-8' });
+const jsonStreamPackageVersion = jsonStreamPackageVersionResult.replace(/[a-z ,:'\n]/g, '');
 
 pluginTester({
   plugin,
@@ -110,6 +112,18 @@ try {
 }
 
 const { default: Jest } = jestResult;`, // formatted
+    },
+    'Import default with fallback name case': {
+      code: 'import JSONStream from \'JSONStream\';',
+      output: `let jSONStreamResult;
+
+try {
+  jSONStreamResult = import("${cdn}/JSONStream@${jsonStreamPackageVersion}");
+} catch (err) {
+  jSONStreamResult = import("${fallback}/JSONStream@${jsonStreamPackageVersion}");
+}
+
+const { default: JSONStream } = jSONStreamResult;`, // formatted
     },
   },
 });
