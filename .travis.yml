@@ -8,5 +8,5 @@ node_js:
 
 script:
   - yarn lint
-  - yarn coverage:ci
+  - yarn test:coverage:ci
   - yarn build

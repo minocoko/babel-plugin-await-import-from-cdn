@@ -1,32 +1,19 @@
-import fs from 'fs';
 import path from 'path';
-import packageManagers from './package-manager';
-
-let packageVersionCache;
-
-const updatePackageVersionCache = (cwd) => {
-  // check yarn.lock or package-lock.json
-  let packageManager;
-  const exists = fs.existsSync(path.join(cwd, 'yarn.lock'));
-  if (exists) {
-    packageManager = packageManagers('yarn');
-  } else {
-    packageManager = packageManagers('npm');
-  }
-  packageVersionCache = packageManager.list();
-};
 
 const camelize = (str) => str.replace(
   /(?:^\w|[A-Z]|\b\w)/g,
-  (word, index) => (index === 0 ? word.toLowerCase() : word.toUpperCase()),
+  (word) => word.toLowerCase(),
 )
   .replace(/\s+@/g, '');
 
-const getPackageInfo = (source) => {
+const getPackageInfo = (cwd, source, includeDevDependencies) => {
   // TODO more case?
   const [one, two, ...extraPath] = source.split('/');
   let packageName = one;
-  let packageVersion = packageVersionCache[packageName];
+  // eslint-disable-next-line import/no-dynamic-require,global-require
+  const { dependencies, devDependencies } = require(path.join(cwd, 'package.json'));
+  let packageVersion = dependencies[packageName]
+    || (includeDevDependencies && devDependencies[packageName]);
   if (packageVersion) {
     return {
       packageName,
@@ -36,7 +23,8 @@ const getPackageInfo = (source) => {
   }
 
   packageName = `${one}/${two}`;
-  packageVersion = packageVersionCache[packageName];
+  packageVersion = dependencies[packageName]
+    || (includeDevDependencies && devDependencies[packageName]);
 
   return {
     packageName,
@@ -51,7 +39,7 @@ export default ({ types: t }) => ({
       const {
         cwd,
         opts: {
-          cdn, matches, fallback, webpackIgnore,
+          cdn, matches, fallback, webpackIgnore, includeDevDependencies,
         },
       } = state;
 
@@ -85,14 +73,11 @@ export default ({ types: t }) => ({
         }
       }
 
-      if (!packageVersionCache) {
-        updatePackageVersionCache(cwd);
-      }
       const {
         packageName,
         packageVersion,
         extraPath,
-      } = getPackageInfo(source);
+      } = getPackageInfo(cwd, source, includeDevDependencies);
 
       const buildPackageUrl = (cdnUrl) => {
         let url = `${cdnUrl}/${packageName}@${packageVersion}${extraPath.length ? `/${extraPath.join('/')}` : ''}`;

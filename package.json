@@ -25,12 +25,13 @@
   "scripts": {
     "lint": "eslint src babel.config.js rollup.config.js --fix",
     "test": "jest",
-    "coverage": "jest --coverage",
-    "coverage:ci": "jest --coverage --coverageReporters=text-lcov|coveralls",
+    "test:coverage": "jest --coverage",
+    "test:coverage:ci": "jest --coverage --coverageReporters=text-lcov|coveralls",
     "build": "rollup -c",
     "prepare": "yarn build"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.12.11",
     "babel-eslint": "^10.1.0",
     "babel-plugin-tester": "^10.0.0",
     "coveralls": "^3.1.0",
@@ -44,7 +45,6 @@
   },
   "dependencies": {
     "@babel/core": "^7.12.10",
-    "@babel/preset-env": "^7.12.11",
     "@babel/types": "^7.12.12"
   },
   "jest": {

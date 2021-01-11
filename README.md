@@ -71,3 +71,4 @@ If fallback is set, will try to load resources from cdn, then fallback
 
 ### matches
 if matches is set, Only matched package will transpile to use CDN resources
+If not set, will match all packages in dependencies

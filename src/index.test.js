@@ -1,20 +1,47 @@
 import pluginTester from 'babel-plugin-tester';
-import { execSync } from 'child_process';
 import plugin from '.';
+import { dependencies, devDependencies } from '../package.json';
 
 const cdn = 'https://unpkg.com';
 const fallback = 'https://cdn.jsdelivr.net/npm';
-const jestPackageVersionResult = execSync('yarn info jest|grep version:', { encoding: 'utf-8' });
-const jestPackageVersion = jestPackageVersionResult.replace(/[a-z ,:'\n]/g, '');
-const babelCorePackageVersionResult = execSync('yarn info @babel/core|grep version:', { encoding: 'utf-8' });
-const babelCorePackageVersion = babelCorePackageVersionResult.replace(/[a-z ,:'\n]/g, '');
-const jsonStreamPackageVersionResult = execSync('yarn info JSONStream|grep version:', { encoding: 'utf-8' });
-const jsonStreamPackageVersion = jsonStreamPackageVersionResult.replace(/[a-z ,:'\n]/g, '');
+const jestPackageVersion = devDependencies.jest;
+const babelCorePackageVersion = dependencies['@babel/core'];
+const babelPresetEnvPackageVersion = devDependencies['@babel/preset-env'];
 
 pluginTester({
   plugin,
   pluginOptions: {
     cdn,
+  },
+  tests: {
+    'Import default with special case @ and /': {
+      code: "import { version } from '@babel/core';",
+      output: `const { version } = await import("${cdn}/@babel/core@${babelCorePackageVersion}");`,
+    },
+  },
+});
+
+pluginTester({
+  plugin,
+  pluginOptions: {
+    cdn,
+    includeDevDependencies: true,
+  },
+  tests: {
+    'Import default with special case @ and /': {
+      code: "import { version } from '@babel/preset-env';",
+      output: `const { version } = await import(
+  "${cdn}/@babel/preset-env@${babelPresetEnvPackageVersion}"
+);`,
+    },
+  },
+});
+
+pluginTester({
+  plugin,
+  pluginOptions: {
+    cdn,
+    includeDevDependencies: true,
   },
   tests: {
     'Import namespace': {
@@ -50,6 +77,7 @@ pluginTester({
   plugin,
   pluginOptions: {
     cdn,
+    includeDevDependencies: true,
     matches: {
       '^jest$': true,
     },
@@ -72,6 +100,7 @@ pluginTester({
   plugin,
   pluginOptions: {
     cdn,
+    includeDevDependencies: true,
     matches: {
       '^jest$': '/build/jest.js',
     },
@@ -89,6 +118,7 @@ pluginTester({
   pluginOptions: {
     cdn,
     fallback,
+    includeDevDependencies: true,
   },
   tests: {
     'Import namespace with fallback': {
@@ -113,18 +143,6 @@ try {
 
 const { default: Jest } = jestResult;`, // formatted
     },
-    'Import default with fallback name case': {
-      code: 'import JSONStream from \'JSONStream\';',
-      output: `let jSONStreamResult;
-
-try {
-  jSONStreamResult = import("${cdn}/JSONStream@${jsonStreamPackageVersion}");
-} catch (err) {
-  jSONStreamResult = import("${fallback}/JSONStream@${jsonStreamPackageVersion}");
-}
-
-const { default: JSONStream } = jSONStreamResult;`, // formatted
-    },
   },
 });
 
@@ -133,6 +151,7 @@ pluginTester({
   pluginOptions: {
     cdn,
     webpackIgnore: true,
+    includeDevDependencies: true,
   },
   tests: {
     'Import namespace with webpackIgnore': {
