@@ -70,5 +70,5 @@ if build application with webpack, set webpackIgnore to true;
 If fallback is set, will try to load resources from cdn, then fallback
 
 ### matches
-if matches is set, Only matched package will transpile to use CDN resources
+if matches is set, Only matched package will transpile to use CDN resources <br>
 If not set, will match all packages in dependencies
