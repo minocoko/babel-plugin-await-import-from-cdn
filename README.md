@@ -1,7 +1,7 @@
 <div align="center">
 <h1>babel-plugin-await-import-from-cdn</h1>
 
-<p>Allows you to load resources from CDN</p>
+<p>Allows you to load assets from CDN</p>
 </div>
 
 ---
@@ -12,21 +12,7 @@
 [![NPM Version](https://img.shields.io/npm/v/babel-plugin-await-import-from-cdn)](https://www.npmjs.com/package/babel-plugin-await-import-from-cdn)
 [![NPM License](https://img.shields.io/npm/l/babel-plugin-await-import-from-cdn)](https://github.com/minocoko/babel-plugin-await-import-from-cdn/blob/main/LICENSE)
 
-This plugin allow you to load resources from CDN by using [top level await](https://github.com/tc39/proposal-top-level-await#dependency-fallbacks) and import function
-
-For example, following code
-```javascript
-import jQuery from 'jquery';
-```
-will transpile into
-```javascript
-let jQuery;
-try {
-  jQuery = await import('https://cdn-a.com/jQuery');
-} catch {
-  jQuery = await import('https://cdn-b.com/jQuery');
-}
-```
+This plugin allow you to load assets from CDN by using [top level await](https://github.com/tc39/proposal-top-level-await#dependency-fallbacks) and import function
 
 ## Install
 ```bash
@@ -49,12 +35,21 @@ module.exports = {
     ['babel-plugin-await-import-from-cdn', {
       cdn: 'https://cdn.skypack.dev',
       webpackIgnore: true,
-      matches: {
-        '^react$': true,
-      },
     }],
   ],
 };
+```
+Using this configuration, following code
+```javascript
+import React from 'react';
+```
+will transpile into
+```javascript
+const {
+  default: React
+} = await import(
+/* webpackIgnore: true */
+"https://cdn.skypack.dev/react@^17.0.1");
 ```
 For more detail, please check the base use example of this repo
 
@@ -67,8 +62,13 @@ The host url of the cdn provider, for example https://skypack.dev, https://cdnjs
 if build application with webpack, set webpackIgnore to true;
 
 ### fallback
-If fallback is set, will try to load resources from cdn, then fallback
+If fallback is set, will try to load assets from cdn, then will ues fallback to load assets
 
 ### matches
-if matches is set, Only matched package will transpile to use CDN resources <br>
+if matches is set, Only matched package will transpile to use CDN assets <br>
 If not set, will match all packages in dependencies
+```javascript
+matches: {
+  '^react$': true,
+},
+```

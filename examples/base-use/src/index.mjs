@@ -1,3 +1,3 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-console.log(React, useState);
+console.log(React);

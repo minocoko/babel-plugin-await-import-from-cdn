@@ -7,9 +7,6 @@ module.exports = {
     ['babel-plugin-await-import-from-cdn', {
       cdn: 'https://cdn.skypack.dev',
       webpackIgnore: true,
-      matches: {
-        '^react$': true,
-      },
     }],
   ],
 };
