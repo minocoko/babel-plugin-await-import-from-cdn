@@ -33,7 +33,7 @@ module.exports = {
   plugins: [
     '@babel/plugin-syntax-top-level-await',
     ['babel-plugin-await-import-from-cdn', {
-      cdn: 'https://cdn.skypack.dev',
+      host: 'https://cdn.skypack.dev',
       webpackIgnore: true,
     }],
   ],
@@ -55,14 +55,14 @@ For more detail, please check the base use example of this repo
 
 
 ## Options
-### cdn
-The host url of the cdn provider, for example https://skypack.dev, https://cdnjs.com, https://unpkg.com
+### host
+The host url of the CDN provider, for example https://skypack.dev, https://cdnjs.com, https://unpkg.com
 
 ### webpackIgnore
 if build application with webpack, set webpackIgnore to true;
 
 ### fallback
-If fallback is set, will try to load assets from cdn, then will ues fallback to load assets
+If fallback is set, will try to load assets from CDN, then will ues fallback to load assets
 
 ### matches
 if matches is set, Only matched package will transpile to use CDN assets <br>

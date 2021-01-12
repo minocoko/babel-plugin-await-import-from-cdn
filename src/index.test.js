@@ -2,7 +2,7 @@ import pluginTester from 'babel-plugin-tester';
 import plugin from '.';
 import { dependencies, devDependencies } from '../package.json';
 
-const cdn = 'https://unpkg.com';
+const host = 'https://unpkg.com';
 const fallback = 'https://cdn.jsdelivr.net/npm';
 const jestPackageVersion = devDependencies.jest;
 const babelCorePackageVersion = dependencies['@babel/core'];
@@ -11,12 +11,12 @@ const babelPresetEnvPackageVersion = devDependencies['@babel/preset-env'];
 pluginTester({
   plugin,
   pluginOptions: {
-    cdn,
+    host,
   },
   tests: {
     'Import default with special case @ and /': {
       code: "import { version } from '@babel/core';",
-      output: `const { version } = await import("${cdn}/@babel/core@${babelCorePackageVersion}");`,
+      output: `const { version } = await import("${host}/@babel/core@${babelCorePackageVersion}");`,
     },
   },
 });
@@ -24,14 +24,14 @@ pluginTester({
 pluginTester({
   plugin,
   pluginOptions: {
-    cdn,
+    host,
     includeDevDependencies: true,
   },
   tests: {
     'Import default with special case @ and /': {
       code: "import { version } from '@babel/preset-env';",
       output: `const { version } = await import(
-  "${cdn}/@babel/preset-env@${babelPresetEnvPackageVersion}"
+  "${host}/@babel/preset-env@${babelPresetEnvPackageVersion}"
 );`,
     },
   },
@@ -40,34 +40,34 @@ pluginTester({
 pluginTester({
   plugin,
   pluginOptions: {
-    cdn,
+    host,
     includeDevDependencies: true,
   },
   tests: {
     'Import namespace': {
       code: 'import * as Jest from \'jest\';',
-      output: `const Jest = await import("${cdn}/jest@${jestPackageVersion}");`,
+      output: `const Jest = await import("${host}/jest@${jestPackageVersion}");`,
     },
     'Import default': {
       code: 'import Jest from \'jest\';',
-      output: `const { default: Jest } = await import("${cdn}/jest@${jestPackageVersion}");`,
+      output: `const { default: Jest } = await import("${host}/jest@${jestPackageVersion}");`,
     },
     'Import default with special case @ and /': {
       code: "import { version } from '@babel/core';",
-      output: `const { version } = await import("${cdn}/@babel/core@${babelCorePackageVersion}");`,
+      output: `const { version } = await import("${host}/@babel/core@${babelCorePackageVersion}");`,
     },
     'Import general': {
       code: 'import { run } from \'jest\';',
-      output: `const { run } = await import("${cdn}/jest@${jestPackageVersion}");`,
+      output: `const { run } = await import("${host}/jest@${jestPackageVersion}");`,
     },
     'Import default & general': {
       code: 'import Jest, { run } from \'jest\';',
-      output: `const { default: Jest, run } = await import("${cdn}/jest@${jestPackageVersion}");`,
+      output: `const { default: Jest, run } = await import("${host}/jest@${jestPackageVersion}");`,
     },
     'Import default & general with extra path': {
       code: 'import Jest, { run } from \'jest/build/jest.js\';',
       output: `const { default: Jest, run } = await import(
-  "${cdn}/jest@${jestPackageVersion}/build/jest.js"
+  "${host}/jest@${jestPackageVersion}/build/jest.js"
 );`, // formatted
     },
   },
@@ -76,7 +76,7 @@ pluginTester({
 pluginTester({
   plugin,
   pluginOptions: {
-    cdn,
+    host,
     includeDevDependencies: true,
     matches: {
       '^jest$': true,
@@ -85,12 +85,12 @@ pluginTester({
   tests: {
     'Import namespace with matches': {
       code: 'import * as Jest from \'jest\';',
-      output: `const Jest = await import("${cdn}/jest@${jestPackageVersion}");`,
+      output: `const Jest = await import("${host}/jest@${jestPackageVersion}");`,
     },
     'Multiple import with matches': {
       code: `import jest from 'jest';
       import './index.css';`,
-      output: `const { default: jest } = await import("${cdn}/jest@${jestPackageVersion}");
+      output: `const { default: jest } = await import("${host}/jest@${jestPackageVersion}");
 import "./index.css";`, // formatted
     },
   },
@@ -99,7 +99,7 @@ import "./index.css";`, // formatted
 pluginTester({
   plugin,
   pluginOptions: {
-    cdn,
+    host,
     includeDevDependencies: true,
     matches: {
       '^jest$': '/build/jest.js',
@@ -108,7 +108,7 @@ pluginTester({
   tests: {
     'Import namespace with matches & extra path': {
       code: 'import * as Jest from \'jest\';',
-      output: `const Jest = await import("${cdn}/jest@${jestPackageVersion}/build/jest.js");`,
+      output: `const Jest = await import("${host}/jest@${jestPackageVersion}/build/jest.js");`,
     },
   },
 });
@@ -116,7 +116,7 @@ pluginTester({
 pluginTester({
   plugin,
   pluginOptions: {
-    cdn,
+    host,
     fallback,
     includeDevDependencies: true,
   },
@@ -126,7 +126,7 @@ pluginTester({
       output: `let Jest;
 
 try {
-  Jest = import("${cdn}/jest@${jestPackageVersion}");
+  Jest = import("${host}/jest@${jestPackageVersion}");
 } catch (err) {
   Jest = import("${fallback}/jest@${jestPackageVersion}");
 }`, // formatted
@@ -136,7 +136,7 @@ try {
       output: `let jestResult;
 
 try {
-  jestResult = import("${cdn}/jest@${jestPackageVersion}");
+  jestResult = import("${host}/jest@${jestPackageVersion}");
 } catch (err) {
   jestResult = import("${fallback}/jest@${jestPackageVersion}");
 }
@@ -149,7 +149,7 @@ const { default: Jest } = jestResult;`, // formatted
 pluginTester({
   plugin,
   pluginOptions: {
-    cdn,
+    host,
     webpackIgnore: true,
     includeDevDependencies: true,
   },
@@ -158,7 +158,7 @@ pluginTester({
       code: 'import * as Jest from \'jest\';',
       output: `const Jest = await import(
   /* webpackIgnore: true */
-  "${cdn}/jest@${jestPackageVersion}"
+  "${host}/jest@${jestPackageVersion}"
 );`,
     },
   },

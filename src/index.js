@@ -39,7 +39,7 @@ export default ({ types: t }) => ({
       const {
         cwd,
         opts: {
-          cdn, matches, fallback, webpackIgnore, includeDevDependencies,
+          host, matches, fallback, webpackIgnore, includeDevDependencies,
         },
       } = state;
 
@@ -116,7 +116,7 @@ export default ({ types: t }) => ({
         const nameIdentifier = t.identifier(importNamespace ? importNamespace.local.name : `${camelize(packageName)}Result`);
         variableDeclarator = t.variableDeclarator(nameIdentifier, null);
         const variableDeclaration = t.variableDeclaration('let', [variableDeclarator]);
-        const tryBlockStatement = getAwaitExpressionBlockStatement(nameIdentifier, cdn);
+        const tryBlockStatement = getAwaitExpressionBlockStatement(nameIdentifier, host);
         const catchBlockStatement = getAwaitExpressionBlockStatement(nameIdentifier, fallback);
         const catchClause = t.catchClause(t.identifier('err'), catchBlockStatement);
         const tryStatement = t.tryStatement(tryBlockStatement, catchClause);
@@ -132,7 +132,7 @@ export default ({ types: t }) => ({
           declaration.parent.body.push(nameVariableDeclaration);
         }
       } else {
-        const awaitCallExpression = getAwaitCallExpression(cdn);
+        const awaitCallExpression = getAwaitCallExpression(host);
         const initExpression = t.awaitExpression(awaitCallExpression);
         if (importNamespace) {
           const nameIdentifier = t.identifier(importNamespace.local.name);
